@@ -4,7 +4,7 @@ const characterSchema = new mongoose.Schema({
   name: { type: String, required: true },
   number: { type: Number, required: true },
   dies: { type: Boolean, default: false },
-  date: { type: Date, default: Date.now },
+  date: { type: Date, default: null },
   aliases: { type: Array, default:[]}
 });
 
