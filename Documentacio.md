@@ -5,3 +5,8 @@
 
 creem un docker-compose.yml:
 
+
+
+## Creacio App
+
+npm create vite@latest Nom-Aplicacio
