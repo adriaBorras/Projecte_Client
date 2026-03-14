@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import type { characterType } from './types/characterType'
+import 'bootstrap/dist/css/bootstrap.min.css';
 //components
 import { CartaCharacter } from './assets/components/CartaCharacter'
 
@@ -21,16 +22,22 @@ function App() {
 
   return (
     <>
-      <h1 className="title">Hellsing character list</h1>
-      {characters.map(character => (
-        <CartaCharacter key={character._id}
-            character={character}
-          />
-      ))}
+      <div className="container">
+
+        <h1 className="title my-5 text-center">Hellsing character list</h1>
+        <div className="row justify-content-center CharactersRow">
+
+          {characters.map(character => (
+            <CartaCharacter key={character._id}
+              character={character}
+            />
+          ))}
+        </div>
+      </div>
 
 
 
-      
+
     </>
   )
 }
