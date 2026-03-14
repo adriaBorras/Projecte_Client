@@ -1,6 +1,6 @@
 // types, descriu les propietats/estructura dels objectes
 
-export type character = {
+export type characterType = {
   _id: string
   name: string
   number: string

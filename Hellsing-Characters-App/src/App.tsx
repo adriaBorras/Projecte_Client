@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import './App.css'
-import type { character } from './types/character'
+import type { characterType } from './types/characterType'
+//components
+import { CartaCharacter } from './assets/components/CartaCharacter'
 
 
 
@@ -9,22 +11,26 @@ import type { character } from './types/character'
 function App() {
   // const [count, setCount] = useState(0)
 
-  const [characters, setCharacters] = useState<character[]>([])
+  const [characters, setCharacters] = useState<characterType[]>([])
 
   useEffect(() => {
     fetch('http://localhost:3000/api/characters')
       .then(res => res.json())
-      .then(data => setCharacters(data))
-  }, [])
+      .then(data => setCharacters(data)) //actualitza characters. In React, any time state updates, React renders the component(App) again so the UI reflects the new data.
+  }, []) //Empty array []. Runs only once when the component mounts (when the page loads)
 
   return (
     <>
       <h1 className="title">Hellsing character list</h1>
       {characters.map(character => (
-        <div key={character._id}>
-          <p>{character.name}</p>
-        </div>
+        <CartaCharacter key={character._id}
+            character={character}
+          />
       ))}
+
+
+
+      
     </>
   )
 }
