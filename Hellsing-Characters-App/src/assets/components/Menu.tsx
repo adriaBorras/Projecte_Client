@@ -4,8 +4,7 @@ import { useState, useEffect } from "react";
 
 export function Menu({ onAfegirCharacter }: { onAfegirCharacter: () => void }) { //.ts es una funcio
   const [mostraModalFormulari, setMostraModalFormulari] = useState(false);
-
-
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -13,13 +12,11 @@ export function Menu({ onAfegirCharacter }: { onAfegirCharacter: () => void }) {
     const formData = new FormData(e.currentTarget);
     const numberValue = formData.get("number")?.toString().trim();
 
-
     const data = {
       name: formData.get("name") as string,
-      // number: Number(formData.get("number")),
       number: numberValue ? Number(numberValue) : undefined, // undefined triggers Mongoose required
       date: formData.get("date") as string,
-      dies: formData.get("dies") === "on",
+      dies: formData.get("dies") ? true : false,
       aliases: (formData.get("aliases") as string).split(","),
     };
 
@@ -32,22 +29,25 @@ export function Menu({ onAfegirCharacter }: { onAfegirCharacter: () => void }) {
         body: JSON.stringify(data),
       });
 
-      if (!response.ok) throw new Error("Error posting data");
+      const Resultat = await response.json();
 
-      const savedCharacter = await response.json();
-      console.log("Saved to MongoDB:", savedCharacter);
+      //errors del post
+      if (!response.ok) { //si la resposta no es ok, aurem guardat els errors al Resultat del response
+        if (Resultat.errors) {
+          setErrors(Resultat.errors); // guardar els errors al State
+        } else {
+          alert(Resultat.error || "Server error");
+        }
+        return;
+      }
+
       onAfegirCharacter();
       setMostraModalFormulari(false);
     } catch (error) {
-      console.error("Failed to save character:", error);
+      console.error("Error al crear character:", error);
     }
     // setMostraModalFormulari(false);
   }
-
-  
-
-
-
 
   return (
     <>
@@ -57,8 +57,6 @@ export function Menu({ onAfegirCharacter }: { onAfegirCharacter: () => void }) {
         >Afegir nou
         </button>
       </div>
-
-
 
       {mostraModalFormulari && (
         <div className="modal d-block"> {/* d-block mostra el modal, default es display:none*/}
@@ -78,10 +76,12 @@ export function Menu({ onAfegirCharacter }: { onAfegirCharacter: () => void }) {
                   <div className=" d-flex flex-column">
                     <label htmlFor="name">Nom: </label>
                     <input type="text" name="name" id="name" />
+                    {errors.name && <span className="text-danger">{errors.name}</span>}
                   </div>
                   <div className=" d-flex flex-column">
                     <label htmlFor="number">Numero: </label>
                     <input type="number" name="number" id="number" />
+                    {errors.number && <span className="text-danger">{errors.number}</span>}
                   </div>
                   <div className=" d-flex flex-column">
                     <label htmlFor="date">Data Naixement: </label>
@@ -95,8 +95,6 @@ export function Menu({ onAfegirCharacter }: { onAfegirCharacter: () => void }) {
                     <label htmlFor="aliases">Sobrenoms: </label>
                     <input type="text" name="aliases" id="aliases" />
                   </div>
-
-
                 </div>
 
                 <div className="modal-footer">
@@ -116,8 +114,6 @@ export function Menu({ onAfegirCharacter }: { onAfegirCharacter: () => void }) {
           </div>
         </div>
       )}
-
-
     </>
   );
 }

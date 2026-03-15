@@ -42,7 +42,19 @@ app.post('/api/characters', async (req, res, next) => {
     const savedCharacter = await newCharacter.save();
     res.status(201).json(savedCharacter);
   } catch (error) {
-    next(error);
+
+    // next(error);
+    //si hi ha algun de vlaidacions...
+    if (error.name === "ValidationError") {
+      const errors = {};
+      for (const key in error.errors) {
+        errors[key] = error.errors[key].message;
+      }
+      return res.status(400).json({ errors }); // retorna array d'errors {clau:valor}
+    }
+    //si no e sun error de validacio...
+    res.status(500).json({ error: "Error del servidor" });
+
   }
 });
 
@@ -60,7 +72,7 @@ app.delete('/api/characters/:id', async (req, res, next) => {
 
     res.status(200).json({ message: "Character deleted", deletedCharacter });
   } catch (error) {
-    next(error);
+    // next(error);
   }
 });
 

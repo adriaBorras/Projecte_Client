@@ -38,7 +38,7 @@ export function CartaCharacter({ character, onDelete }: characterProps) {
               <div className="modal-body">
                 <p>Numero: {character.number}</p>
                 <p>Naixement: {character.date}</p>
-                <p>La palma?: {character.dies ? "True" : "False"}</p>
+                <p>Acaba mort: {character.dies ? "True" : "False"}</p>
                 <p>Conegut/da per: {character.aliases.join(", ")}</p>
               </div>
 
