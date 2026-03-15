@@ -1,8 +1,28 @@
-.Carta{
-    
-    /* background-color: red; */
-    /* width: 300px; */
-    /* height: 400px; */
+html{
+    background-color: pink;
+}
+#root{
+    background-color: aqua;
 }
 
-.CharactersRow{}
+.container{
+    /* background-color: black; */
+}
+
+.Carta{
+    background-color: rgb(155, 0, 0);
+    color: black;
+    text-decoration: none;
+}
+
+.Carta:hover{
+    opacity: 0.7;
+}
+
+.CharactersRow{
+    background-color: black;
+}
+/* modal */
+.modal{
+    background-color: rgba(0, 0, 0, 0.233);
+}

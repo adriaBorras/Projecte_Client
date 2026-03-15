@@ -1,4 +1,4 @@
-// import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import type { characterType } from "../../types/characterType";
 
 
@@ -7,22 +7,56 @@ type characterProps = {
 };
 
 export function CartaCharacter({ character }: characterProps) {
-
+  const [mostraModal, setMostraModal] = useState(false);
 
   return (
 
-    <div className="col-12 col-md-4 col-xl-4 ">
-        <div className="Carta bg-warning h-100 d-flex flex-column pt-3">
-          <div className="imatge w-75 bg-black mx-auto mb-3 " style={{ aspectRatio: "1 / 0.75" }}>
-          </div>
-            <ul>
-                <li>Nom: {character.name}</li>
-                <li>Numero:{character.number}</li>
-                <li>Naixement: {character.date}</li>
-                <li>La palma?:{character.dies ? "True" : "False" }</li>  {/* .ts ignora null,false,undefined */}
-                <li>Conegut/da per: {character.aliases.join(", ")}</li>
-            </ul>
+    <div className="col-12 col-sm-6 col-md-4 col-lg-4 mb-5" onClick={() => setMostraModal(true)}>
+      <div className="Carta  h-100 d-flex flex-column pt-3 ">
+        <div className="imatge w-75 bg-black mx-auto mb-3 " style={{ aspectRatio: "1 / 0.75" }}>
         </div>
+        <h3 className="text-center mb-3">
+          {character.name}
+        </h3>
+      </div>
+
+
+      {mostraModal && (
+        <div className="modal d-block">
+          <div className="modal-dialog "
+            onClick={(e) => e.stopPropagation()} // prevent closing when clicking modal content
+          >
+            <div className="modal-content">
+
+              <div className="modal-header">
+                <h5 className="modal-title">Detalls de {character.name}</h5>
+              </div>
+
+              <div className="modal-body">
+                <p>Numero: {character.number}</p>
+                <p>Naixement: {character.date}</p>
+                <p>La palma?: {character.dies ? "True" : "False"}</p>
+                <p>Conegut/da per: {character.aliases.join(", ")}</p>
+              </div>
+
+              <div className="modal-footer">
+                <button className="btn btn-danger"
+                  onClick={() => setMostraModal(false)}
+                >
+                  Tanca
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+
     </div>
+
+
+
+
+
   );
 }

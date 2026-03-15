@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import type { characterType } from './types/characterType'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'; //include for modals
 //components
 import { CartaCharacter } from './assets/components/CartaCharacter'
+import { Menu } from './assets/components/Menu';
 
 
 
@@ -24,6 +26,7 @@ function App() {
     <>
       <div className="container">
 
+        <Menu />
         <h1 className="title my-5 text-center">Hellsing character list</h1>
         <div className="row justify-content-center CharactersRow">
 
