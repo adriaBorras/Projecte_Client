@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { characterType } from "../../types/characterType";
+import type { characterType } from "../types/characterType";
 
 
 type characterProps = {

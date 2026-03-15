@@ -15,31 +15,13 @@ L'objectiu NO és fer una arquitectura perfecta des del minut 1, sinó construir
 
 ---
 
-#  Organització del treball en grup
-
-- Cada membre ha de tocar:
-  - Model de dades
-  - Almenys un endpoint
-  - Almenys un component React
-- Es poden repartir responsabilitats principals:
-  - Persona A → Backend principal
-  - Persona B → Frontend principal
-  - Repartiment d'estilat / UX
-
-Però ningú pot quedar-se només en una part.
-
----
+#  Treball individual
 
 # FASE 1 — Disseny 
 
 ## 1️⃣ Elecció de temàtica
-Exemples:
-- Videojocs
-- Receptes
-- Llibres
-- Entrenaments
-- Projectes
-- Tasques avançades
+
+ - Una aplicacio per consultar Personatges del manga/serie Hellsing.
 
 ## 2️⃣ Definició del model
 L'entitat principal ha de tenir obligatòriament:
@@ -50,10 +32,28 @@ L'entitat principal ha de tenir obligatòriament:
 - Date
 - Array
 
-S'ha de justificar:
-- Per què aquests camps
+- Per què aquests camps?
+  - String -> Nom del perosnatge.
+  - Number -> numero id alternatiu.
+  - Boolean -> Si el personatge acaba mort al final de la serie: true/false
+  - Date -> Data de naixement del personatge.
+  - Array ->  Llista de sobrenoms del personatge.
+
 - Quines validacions tindran els camps
 
+  - Camp Nom:
+    - String  
+    - Obligatori
+    - minim 3 lletres
+  - Camp Numero:
+    - Number  
+    
+  - Camp Es mort (boolean):
+    - No calen validacions? 
+  - Camp data naixmement:
+    - Date
+  - Camp Sobrenoms:
+    - Array
 ---
 
 #  FASE 2 — Backend funcional 
