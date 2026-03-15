@@ -7,10 +7,10 @@ type characterProps = {
   onDelete: (id: number) => void;
 };
 
-export function CartaCharacter({ character,onDelete }: characterProps) {
+export function CartaCharacter({ character, onDelete }: characterProps) {
   const [mostraModal, setMostraModal] = useState(false);
 
-  
+
 
   return (
 
@@ -44,23 +44,30 @@ export function CartaCharacter({ character,onDelete }: characterProps) {
 
               <div className="modal-footer">
                 <button className="btn btn-danger"
-                  onClick={() => onDelete(character.number)}
+                  onClick={() => {
+                    const confirmDelete = window.confirm(`Segur que vols eliminar ${character.name}?`);
+                    if (confirmDelete) {
+                      onDelete(character.number);
+                      setMostraModal(false);
+                    }
+                  }}
                 >
-                  Elimina
-                </button>
-                <button className="btn btn-danger"
-                  onClick={() => setMostraModal(false)}
-                >
-                  Tanca
-                </button>
-              </div>
+                Elimina
+              </button>
+              <button className="btn btn-danger"
+                onClick={() => setMostraModal(false)}
+              >
+                Tanca
+              </button>
             </div>
           </div>
         </div>
-      )}
+        </div>
+  )
+}
 
 
-    </div>
+    </div >
 
 
 
