@@ -3,7 +3,7 @@
 export type characterType = {
   _id: string
   name: string
-  number: string
+  number: number
   date: string
   dies: boolean
   aliases: []

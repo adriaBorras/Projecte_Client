@@ -13,7 +13,7 @@ app.use(express.json());
 
 // GET characters
 app.get('/', (request, response) => {
-    response.send(` 
+  response.send(` 
       Ruta per consultar Characters: /api/characters <br>
       Ruta per afegir un Character: <br>
       Ruta per editar un Character: <br>
@@ -27,7 +27,6 @@ app.get('/api/characters', async (req, res) => {
 });
 
 // POST character
-
 app.post('/api/characters', async (req, res, next) => {
   try {
     const dataCharacter = req.body;
@@ -37,7 +36,7 @@ app.post('/api/characters', async (req, res, next) => {
       number: dataCharacter.number,
       dies: dataCharacter.dies,
       aliases: dataCharacter.aliases,
-      date: dataCharacter.date  
+      date: dataCharacter.date
     });
 
     const savedCharacter = await newCharacter.save();
@@ -46,6 +45,27 @@ app.post('/api/characters', async (req, res, next) => {
     next(error);
   }
 });
+
+
+// delete per id
+app.delete('/api/characters/:id', async (req, res, next) => {
+  try {
+    const numeroId = Number(req.params.id);
+    // busca i elimina el character
+    const deletedCharacter = await Character.findOneAndDelete({ number: numeroId });
+
+    if (!deletedCharacter) {
+      return res.status(404).json({ error: "Character not found" });
+    }
+
+    res.status(200).json({ message: "Character deleted", deletedCharacter });
+  } catch (error) {
+    next(error);
+  }
+});
+
+
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

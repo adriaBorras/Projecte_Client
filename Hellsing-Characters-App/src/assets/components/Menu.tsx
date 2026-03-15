@@ -25,8 +25,6 @@ export function Menu({ onAfegirCharacter }: { onAfegirCharacter: () => void }) {
 
     console.log(data);
 
-
-
     try {
       const response = await fetch("http://localhost:3000/api/characters", {
         method: "POST",
@@ -38,13 +36,15 @@ export function Menu({ onAfegirCharacter }: { onAfegirCharacter: () => void }) {
 
       const savedCharacter = await response.json();
       console.log("Saved to MongoDB:", savedCharacter);
-      onAfegirCharacter(); 
+      onAfegirCharacter();
       setMostraModalFormulari(false);
     } catch (error) {
       console.error("Failed to save character:", error);
     }
     // setMostraModalFormulari(false);
   }
+
+  
 
 
 

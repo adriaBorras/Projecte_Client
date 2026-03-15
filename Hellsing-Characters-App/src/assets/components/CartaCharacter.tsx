@@ -4,10 +4,13 @@ import type { characterType } from "../../types/characterType";
 
 type characterProps = {
   character: characterType;
+  onDelete: (id: number) => void;
 };
 
-export function CartaCharacter({ character }: characterProps) {
+export function CartaCharacter({ character,onDelete }: characterProps) {
   const [mostraModal, setMostraModal] = useState(false);
+
+  
 
   return (
 
@@ -40,6 +43,11 @@ export function CartaCharacter({ character }: characterProps) {
               </div>
 
               <div className="modal-footer">
+                <button className="btn btn-danger"
+                  onClick={() => onDelete(character.number)}
+                >
+                  Elimina
+                </button>
                 <button className="btn btn-danger"
                   onClick={() => setMostraModal(false)}
                 >

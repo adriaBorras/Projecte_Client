@@ -20,23 +20,41 @@ function App() {
     fetchCharacters()
   }, []); //Empty array []. Runs only once when the component mounts (when the page loads)
 
+  
+  
   function fetchCharacters() {
-  fetch('http://localhost:3000/api/characters')
+    fetch('http://localhost:3000/api/characters')
       .then(res => res.json())
       .then(data => setCharacters(data)) //actualitza characters. In React, any time state updates, React renders the component(App) again so the UI reflects the new data.
-}
+  }
+
+  async function deleteCharacter(id: number) {
+    const response = await fetch(`http://localhost:3000/api/characters/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      console.error("Error a eliminar Character");
+      return;
+    }
+
+    const data = await response.json();
+    fetchCharacters()
+    console.log(data);
+  }
 
   return (
     <>
       <div className="container">
 
-        <Menu onAfegirCharacter={fetchCharacters}/>
+        <Menu onAfegirCharacter={fetchCharacters} />
         <h1 className="title my-5 text-center">Hellsing character list</h1>
         <div className="row justify-content-center CharactersRow">
 
           {characters.map(character => (
             <CartaCharacter key={character._id}
               character={character}
+              onDelete={deleteCharacter}
             />
           ))}
         </div>
