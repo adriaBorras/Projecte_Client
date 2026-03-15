@@ -16,7 +16,7 @@ const characterSchema = new mongoose.Schema({
   dies: {
     type: Boolean,
     required: true,
-    default: false,
+    // default: false,
   },
   date: {
     type: Date,
