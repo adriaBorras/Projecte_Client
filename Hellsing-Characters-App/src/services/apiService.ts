@@ -18,3 +18,21 @@ export async function deleteCharacter(id: number): Promise<any> {
     }
     return await resposta.json();
 }
+
+
+export async function putCharacter(
+  id: number,
+  dadesActualitzades: Partial<characterType>
+): Promise<characterType> {
+  const resposta = await fetch(`${BASE_URL}/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(dadesActualitzades),
+  });
+
+  if (!resposta.ok) {
+    throw new Error("Error actualitzant Character");
+  }
+
+  return await resposta.json();
+}

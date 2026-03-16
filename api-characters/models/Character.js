@@ -5,7 +5,7 @@ const characterSchema = new mongoose.Schema({
     type: String,
     required: [true, "El nom es obligatori"],
     minlength: [3, "El nom ha de tenir almenys 3 caracters"],
-    maxlength: [50, "El nom es massa llarg"],
+    maxlength: [30, "El nom es massa llarg"],
     trim: true
   },
   number: {

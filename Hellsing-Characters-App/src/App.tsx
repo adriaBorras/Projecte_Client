@@ -7,7 +7,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js'; //include for modals
 import { CartaCharacter } from './components/CartaCharacter'
 import { Menu } from './components/Menu';
 
-import { fetchCharacters, deleteCharacter } from './services/apiService';
+import { fetchCharacters, deleteCharacter, putCharacter } from './services/apiService';
 
 
 function App() {
@@ -35,18 +35,32 @@ function App() {
     }
   }
 
+  async function editaCharacter(id: number, dadesActualitzades: Partial<characterType>) {
+    try {
+      await putCharacter(id, dadesActualitzades);
+      carregaCharacters();
+    } catch (error) {
+      console.error("Error actualitzant character:", error);
+    }
+  }
 
   return (
     <>
       <div className="container">
-        <Menu onAfegirCharacter={carregaCharacters} />
+        <Menu 
+          onAfegirCharacter={carregaCharacters} 
+        />
+        
         <h1 className="title my-5 text-center">Hellsing character list</h1>
         <div className="row justify-content-center CharactersRow">
 
           {characters.map(character => (
-            <CartaCharacter key={character._id}
+            <CartaCharacter 
+              key={character._id}
               character={character}
               onDelete={eliminaCharacter}
+              onEdit={editaCharacter}
+
             />
           ))}
         </div>

@@ -5,10 +5,12 @@ import type { characterType } from "../types/characterType";
 type characterProps = {
   character: characterType;
   onDelete: (id: number) => void;
+  onEdit: (id: number, data: Partial<characterType>) => void;
 };
 
-export function CartaCharacter({ character, onDelete }: characterProps) {
+export function CartaCharacter({ character, onDelete, onEdit }: characterProps) {
   const [mostraModal, setMostraModal] = useState(false);
+  const [editant, setEditant] = useState(false);
 
 
 

@@ -45,9 +45,10 @@ L'entitat principal ha de tenir obligatòriament:
     - String  
     - Obligatori
     - minim 3 lletres
+    - maxim 30 lletres
   - Camp Numero:
     - Number  
-    
+    - Positiu
   - Camp Es mort (boolean):
     - No calen validacions? 
   - Camp data naixmement:

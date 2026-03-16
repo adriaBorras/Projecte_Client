@@ -59,6 +59,38 @@ app.post('/api/characters', async (req, res, next) => {
 });
 
 
+// PUT character per id
+app.put('/api/characters/:id', async (req, res, next) => {
+  try {
+    const numeroId = Number(req.params.id);
+    const dadesActualitzades = req.body;
+
+    // busca i actualitza el character
+    const updatedCharacter = await Character.findOneAndUpdate(
+      { number: numeroId },       // filter
+      { $set: dadesActualitzades }, // only update these fields
+      { returnDocument: 'after', runValidators: true } // return updated doc + validate
+    );
+
+    if (!updatedCharacter) {
+      return res.status(404).json({ error: "Character not found" });
+    }
+
+    res.status(200).json(updatedCharacter);
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      const errors = {};
+      for (const key in error.errors) {
+        errors[key] = error.errors[key].message;
+      }
+      return res.status(400).json({ errors });
+    }
+
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+
 // delete per id
 app.delete('/api/characters/:id', async (req, res, next) => {
   try {

@@ -88,7 +88,7 @@ export function Menu({ onAfegirCharacter }: { onAfegirCharacter: () => void }) {
                     <input type="date" name="date" id="date" />
                   </div>
                   <div className=" d-flex flex-column">
-                    <label htmlFor="dies">Ends dead?: </label>
+                    <label htmlFor="dies">Acaba mort?: </label>
                     <input type="checkbox" name="dies" id="dies" />
                   </div>
                   <div className=" d-flex flex-column">
