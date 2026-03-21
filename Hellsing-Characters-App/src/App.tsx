@@ -51,7 +51,7 @@ function App() {
           onAfegirCharacter={carregaCharacters} 
         />
         
-        <h1 className="title my-5 text-center">Hellsing character list</h1>
+        <h1 className="titol my-5 text-center">Hellsing character list</h1>
         <div className="row justify-content-center CharactersRow">
 
           {characters.map(character => (

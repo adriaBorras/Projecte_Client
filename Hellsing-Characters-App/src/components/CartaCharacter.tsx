@@ -28,7 +28,7 @@ export function CartaCharacter({ character, onDelete, onEdit }: characterProps) 
     date: character.date
   });
 
-    // modifica els valors del formulari cuan hi han canvis.
+  // modifica els valors del formulari cuan hi han canvis.
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value, type, checked } = e.target;
 
@@ -37,7 +37,7 @@ export function CartaCharacter({ character, onDelete, onEdit }: characterProps) 
       [name]:
         name === "aliases" ? value.split(",").map(a => a.trim()) // fem array del string
           : type === "checkbox" ? checked // utilitza checked, no value
-          : value
+            : value
     }));
 
   }
@@ -47,32 +47,25 @@ export function CartaCharacter({ character, onDelete, onEdit }: characterProps) 
     const errorsForm: Record<string, string> = {};
 
     if (!dadesFormulari.name || dadesFormulari.name.trim() === "") {
-      errorsForm.name = "El nom es obligatori";
+      errorsForm.name = "El nom es obligatori -front";
     } else if (dadesFormulari.name.length < 3) {
-      errorsForm.name = "El nom ha de tenir minim 3 caracters";
+      errorsForm.name = "El nom ha de tenir minim 3 caracters -front";
 
     }
 
 
     if (dadesFormulari.number === undefined || dadesFormulari.number === null || dadesFormulari.number <= 0) {
-      errorsForm.number = "El número ha de ser major que 0";
+      errorsForm.number = "Ha de ser un numero i major que 0 -front";
     }
 
-    if (!dadesFormulari.date) {
-      errorsForm.date = "La data de naixement és obligatòria";
-    }
-
-    if (!dadesFormulari.aliases || dadesFormulari.aliases.length === 0 || dadesFormulari.aliases[0] === "") {
-      errorsForm.aliases = "Ha de tenir almenys un sobrenom";
-    }
-
+   
     setErrors(errorsForm);
 
     // retorna tru si no hi han errors
     return Object.keys(errorsForm).length === 0;
   }
 
-    //si apretem cancelar edicio, venim aqui
+  //si apretem cancelar edicio, venim aqui
   function reiniciaForm() {
     setDadesFormulari({
       name: character.name,
@@ -89,7 +82,8 @@ export function CartaCharacter({ character, onDelete, onEdit }: characterProps) 
 
     <div className="col-12 col-sm-6 col-md-4 col-lg-4 mb-5" onClick={() => setMostraModal(true)}>
       <div className="Carta  h-100 d-flex flex-column pt-3 ">
-        <div className="imatge w-75 bg-black mx-auto mb-3 " style={{ aspectRatio: "1 / 0.75" }}>
+        <div className="imatge w-75 bg-black mx-auto mb-3 text-center align-content-center text-white" style={{ aspectRatio: "1 / 0.75" }}>
+          imatge 😉👍
         </div>
         <h3 className="text-center mb-3">
           {character.name}
@@ -105,7 +99,7 @@ export function CartaCharacter({ character, onDelete, onEdit }: characterProps) 
             <div className="modal-content">
 
               <div className="modal-header">
-                <h5 className="modal-title">Detalls de {character.name}</h5>
+                <h5 className="modal-title">Detalls de {character.name} (Valida api i frontend, errors frontend)</h5>
               </div>
 
               <div className="modal-body">
@@ -116,7 +110,7 @@ export function CartaCharacter({ character, onDelete, onEdit }: characterProps) 
                       name="name" value={dadesFormulari.name || ""}
                       onChange={handleChange}
                     />
-                    {errors.name && <div className="text-danger">{errors.name}</div>}
+                    {errors.name && <div className="text-primary">{errors.name}</div>}
 
                     <label htmlFor="name">Numero: (falta fer check per comprobar si ja existeix a la bbdd)</label>
                     <input className="form-control mb-2"
@@ -124,6 +118,8 @@ export function CartaCharacter({ character, onDelete, onEdit }: characterProps) 
                       value={dadesFormulari.number || ""}
                       onChange={handleChange}
                     />
+                    {errors.number && <div className="text-primary">{errors.number}</div>}
+
                     <label htmlFor="name">Data de naixement:</label>
                     <input className="form-control mb-2"
                       name="date" type="date"
@@ -151,13 +147,16 @@ export function CartaCharacter({ character, onDelete, onEdit }: characterProps) 
                   </>
                 ) : (
                   <>
-                    <p>Numero: {character.number}</p>
+                    <div className="imatge w-75 bg-black mx-auto mb-3 text-center align-content-center text-white" style={{ aspectRatio: "1 / 0.75" }}>
+                      imatge 😉👍
+                    </div>
+                    <p><strong>Numero:</strong> {character.number}</p>
                     {/* <p>Naixement: {character.date}</p> */}
                     <p>
-                      Naixement: {new Date(character.date).toLocaleDateString('ca-ES')}
+                      <strong>Naixement:</strong> {new Date(character.date).toLocaleDateString('ca-ES')}
                     </p>
-                    <p>Acaba mort: {character.dies ? "True" : "False"}</p>
-                    <p>Conegut/da per: {character.aliases.join(", ")}</p>
+                    <p><strong>Acaba mort:</strong> {character.dies ? "True" : "False"}</p>
+                    <p><strong>Conegut/da per:</strong> {character.aliases.join(", ")}</p>
                   </>
                 )}
 

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 // import type { characterType } from "../../types/characterType";
+import { postCharacter } from "../services/apiService";
 
 
 export function Menu({ onAfegirCharacter }: { onAfegirCharacter: () => void }) { //.ts es una funcio
@@ -20,41 +21,39 @@ export function Menu({ onAfegirCharacter }: { onAfegirCharacter: () => void }) {
       aliases: (formData.get("aliases") as string).split(","),
     };
 
-    console.log(data);
+    // console.log(data);
 
     try {
-      const response = await fetch("http://localhost:3000/api/characters", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+      // const response = await fetch("http://localhost:3000/api/characters", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(data),
+      // });
+      const Resultat = await postCharacter(data);
 
-      const Resultat = await response.json();
-
-      //errors del post
-      if (!response.ok) { //si la resposta no es ok, aurem guardat els errors al Resultat del response
-        if (Resultat.errors) {
-          setErrors(Resultat.errors); // guardar els errors al State
-        } else {
-          alert(Resultat.error || "Server error");
-        }
-        return;
-      }
 
       onAfegirCharacter();
       setMostraModalFormulari(false);
+      setErrors({});
+
+
     } catch (error) {
       console.error("Error al crear character:", error);
+      if (typeof error === "object" && error !== null) {
+        setErrors(error as Record<string, string>);
+      } else {
+        alert(error); // fallback
+      }
     }
     // setMostraModalFormulari(false);
   }
 
   return (
     <>
-      <div className="menu d-flex flex-row justify-content-center mt-5">
-        <button type="button" className="btn btn-warning mx-3" // tenim que especificar type, sino sera submit (pk esta en un form)
+      <div className="menu d-flex flex-row justify-content-center">
+        <button type="button" className="btn btn-warning mx-3 my-2 btnNou" // tenim que especificar type, sino sera submit (pk esta en un form)
           onClick={() => setMostraModalFormulari(true)}
-        >Afegir nou
+        >Afegir nou personatge
         </button>
       </div>
 
@@ -68,7 +67,7 @@ export function Menu({ onAfegirCharacter }: { onAfegirCharacter: () => void }) {
               <form onSubmit={handleSubmit}>
 
                 <div className="modal-header">
-                  <h5 className="modal-title">afegeix nova entrada</h5>
+                  <h5 className="modal-title">afegeix nova entrada (validacio camps API,errors api)</h5>
                 </div>
 
                 <div className="modal-body">
@@ -88,7 +87,7 @@ export function Menu({ onAfegirCharacter }: { onAfegirCharacter: () => void }) {
                     <input type="date" name="date" id="date" />
                   </div>
                   <div className=" d-flex flex-row mt-3">
-                    <input  type="checkbox" name="dies" id="dies" />
+                    <input type="checkbox" name="dies" id="dies" />
                     <label className="mr-5" htmlFor="dies"> -Acaba mort?: </label>
                   </div>
                   <div className=" d-flex flex-column mt-3">

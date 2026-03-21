@@ -22,8 +22,7 @@ export async function deleteCharacter(id: number): Promise<any> {
 
 export async function putCharacter(
   id: number,
-  dadesActualitzades: Partial<characterType>
-): Promise<characterType> {
+  dadesActualitzades: Partial<characterType>): Promise<characterType> {
   const resposta = await fetch(`${BASE_URL}/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
@@ -35,4 +34,22 @@ export async function putCharacter(
   }
 
   return await resposta.json();
+}
+
+
+export async function postCharacter(novesDades: Partial<characterType>): Promise<characterType> {
+  const resposta = await fetch(BASE_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(novesDades),
+  });
+
+  const result = await resposta.json();
+
+  if (!resposta.ok) {
+    // forward validation errors if any
+    throw result.errors || new Error(result.error || "Server error");
+  }
+
+  return result;
 }
