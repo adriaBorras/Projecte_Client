@@ -78,20 +78,20 @@ export function Menu({ onAfegirCharacter }: { onAfegirCharacter: () => void }) {
                     <input type="text" name="name" id="name" />
                     {errors.name && <span className="text-danger">{errors.name}</span>}
                   </div>
-                  <div className=" d-flex flex-column">
+                  <div className=" d-flex flex-column mt-3">
                     <label htmlFor="number">Numero: </label>
                     <input type="number" name="number" id="number" />
                     {errors.number && <span className="text-danger">{errors.number}</span>}
                   </div>
-                  <div className=" d-flex flex-column">
+                  <div className=" d-flex flex-column mt-3">
                     <label htmlFor="date">Data Naixement: </label>
                     <input type="date" name="date" id="date" />
                   </div>
-                  <div className=" d-flex flex-column">
-                    <label htmlFor="dies">Acaba mort?: </label>
-                    <input type="checkbox" name="dies" id="dies" />
+                  <div className=" d-flex flex-row mt-3">
+                    <input  type="checkbox" name="dies" id="dies" />
+                    <label className="mr-5" htmlFor="dies"> -Acaba mort?: </label>
                   </div>
-                  <div className=" d-flex flex-column">
+                  <div className=" d-flex flex-column mt-3">
                     <label htmlFor="aliases">Sobrenoms: </label>
                     <input type="text" name="aliases" id="aliases" />
                   </div>

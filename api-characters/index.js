@@ -4,7 +4,7 @@ require('./mongo');
 const express = require('express');
 const cors = require('cors');
 
-
+// imports de models
 const Character = require('./models/Character');
 
 const app = express();
@@ -68,15 +68,16 @@ app.put('/api/characters/:id', async (req, res, next) => {
     // busca i actualitza el character
     const updatedCharacter = await Character.findOneAndUpdate(
       { number: numeroId },       // filter
-      { $set: dadesActualitzades }, // only update these fields
-      { returnDocument: 'after', runValidators: true } // return updated doc + validate
+      { $set: dadesActualitzades }, // actualitza nomes els camps omplerts del request
+      { returnDocument: 'after', runValidators: true } // return updated character + validate with schema
     );
-
+      //comprovem si retorna un Character
     if (!updatedCharacter) {
-      return res.status(404).json({ error: "Character not found" });
+      return res.status(404).json({ error: "No es troba el character" });
     }
 
     res.status(200).json(updatedCharacter);
+
   } catch (error) {
     if (error.name === "ValidationError") {
       const errors = {};

@@ -6,5 +6,5 @@ export type characterType = {
   number: number
   date: string
   dies: boolean
-  aliases: []
+  aliases: string[]
 }

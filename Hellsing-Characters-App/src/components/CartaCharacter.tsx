@@ -8,10 +8,81 @@ type characterProps = {
   onEdit: (id: number, data: Partial<characterType>) => void;
 };
 
+
+
+
 export function CartaCharacter({ character, onDelete, onEdit }: characterProps) {
   const [mostraModal, setMostraModal] = useState(false);
   const [editant, setEditant] = useState(false);
 
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+
+
+  //formulari editar,omplim per defecte amb les dades del character existent
+  const [dadesFormulari, setDadesFormulari] = useState<Partial<characterType>>({
+    name: character.name,
+    number: character.number,
+    dies: character.dies,
+    aliases: character.aliases,
+    date: character.date
+  });
+
+    // modifica els valors del formulari cuan hi han canvis.
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value, type, checked } = e.target;
+
+    setDadesFormulari(prev => ({
+      ...prev,
+      [name]:
+        name === "aliases" ? value.split(",").map(a => a.trim()) // fem array del string
+          : type === "checkbox" ? checked // utilitza checked, no value
+          : value
+    }));
+
+  }
+  // validem al frontend
+  function validaFormulari() {
+    // const errorsForm: Partial<characterType> = {};
+    const errorsForm: Record<string, string> = {};
+
+    if (!dadesFormulari.name || dadesFormulari.name.trim() === "") {
+      errorsForm.name = "El nom es obligatori";
+    } else if (dadesFormulari.name.length < 3) {
+      errorsForm.name = "El nom ha de tenir minim 3 caracters";
+
+    }
+
+
+    if (dadesFormulari.number === undefined || dadesFormulari.number === null || dadesFormulari.number <= 0) {
+      errorsForm.number = "El número ha de ser major que 0";
+    }
+
+    if (!dadesFormulari.date) {
+      errorsForm.date = "La data de naixement és obligatòria";
+    }
+
+    if (!dadesFormulari.aliases || dadesFormulari.aliases.length === 0 || dadesFormulari.aliases[0] === "") {
+      errorsForm.aliases = "Ha de tenir almenys un sobrenom";
+    }
+
+    setErrors(errorsForm);
+
+    // retorna tru si no hi han errors
+    return Object.keys(errorsForm).length === 0;
+  }
+
+    //si apretem cancelar edicio, venim aqui
+  function reiniciaForm() {
+    setDadesFormulari({
+      name: character.name,
+      number: character.number,
+      dies: character.dies,
+      aliases: character.aliases,
+      date: character.date
+    });
+    setErrors({});
+  }
 
 
   return (
@@ -38,13 +109,82 @@ export function CartaCharacter({ character, onDelete, onEdit }: characterProps) 
               </div>
 
               <div className="modal-body">
-                <p>Numero: {character.number}</p>
-                <p>Naixement: {character.date}</p>
-                <p>Acaba mort: {character.dies ? "True" : "False"}</p>
-                <p>Conegut/da per: {character.aliases.join(", ")}</p>
+                {editant ? (
+                  <>
+                    <label htmlFor="name">Nom:</label>
+                    <input className="form-control mb-2"
+                      name="name" value={dadesFormulari.name || ""}
+                      onChange={handleChange}
+                    />
+                    {errors.name && <div className="text-danger">{errors.name}</div>}
+
+                    <label htmlFor="name">Numero: (falta fer check per comprobar si ja existeix a la bbdd)</label>
+                    <input className="form-control mb-2"
+                      name="number" type="number"
+                      value={dadesFormulari.number || ""}
+                      onChange={handleChange}
+                    />
+                    <label htmlFor="name">Data de naixement:</label>
+                    <input className="form-control mb-2"
+                      name="date" type="date"
+                      value={
+                        dadesFormulari.date ? new Date(dadesFormulari.date).toISOString().split("T")[0] : ""
+                      }
+                      onChange={handleChange}
+                    />
+
+                    <label htmlFor="name">Sobrnoms:</label>
+                    <input className="form-control mb-2"
+                      name="aliases" value={dadesFormulari.aliases?.join(", ") || ""}
+                      onChange={handleChange}
+                    />
+
+                    <div className="form-check">
+                      <input className="form-check-input"
+                        type="checkbox"
+                        name="dies"
+                        checked={dadesFormulari.dies || false}
+                        onChange={handleChange}
+                      />
+                      <label className="form-check-label">Acaba mort?</label>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <p>Numero: {character.number}</p>
+                    {/* <p>Naixement: {character.date}</p> */}
+                    <p>
+                      Naixement: {new Date(character.date).toLocaleDateString('ca-ES')}
+                    </p>
+                    <p>Acaba mort: {character.dies ? "True" : "False"}</p>
+                    <p>Conegut/da per: {character.aliases.join(", ")}</p>
+                  </>
+                )}
+
               </div>
 
               <div className="modal-footer">
+
+                <button
+                  className={` btn btn-success ${editant ? "" : "visually-hidden"}`}
+                  onClick={async () => {
+                    if (!validaFormulari()) return;
+
+                    await onEdit(character.number, dadesFormulari);
+                    setEditant(false);
+                    setMostraModal(false);
+                  }}
+                >
+                  Guarda
+                </button>
+
+                <button className={` btn btn-warning ${editant ? "visually-hidden" : ""}`}
+                  onClick={() => {
+                    setEditant(true)
+                  }}
+                >
+                  Edita
+                </button>
                 <button className="btn btn-danger"
                   onClick={() => {
                     const confirmDelete = window.confirm(`Segur que vols eliminar ${character.name}?`);
@@ -54,19 +194,26 @@ export function CartaCharacter({ character, onDelete, onEdit }: characterProps) 
                     }
                   }}
                 >
-                Elimina
-              </button>
-              <button className="btn btn-danger"
-                onClick={() => setMostraModal(false)}
-              >
-                Tanca
-              </button>
+                  Elimina
+                </button>
+                <button className="btn btn-primary"
+                  onClick={() => {
+                    setMostraModal(false)
+                    if (editant) {
+                      reiniciaForm()
+                    }
+                    setEditant(false)
+                  }}
+
+                >
+                  {editant ? "Cancelar edicio" : "Tanca"}
+                </button>
+              </div>
             </div>
           </div>
         </div>
-        </div>
-  )
-}
+      )
+      }
 
 
     </div >
