@@ -22,21 +22,36 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/characters', async (req, res) => {
-  const characters = await Character.find({});
+  const characters = await Character.find({}).sort({ number: 1 });
   res.json(characters);
+});
+
+app.get('/api/characters/:id', async (req, res) => {
+  const char = await Character.findOne({ number: Number(req.params.id) });
+
+  if (!char) {
+    return res.status(404).json({ error: "Not found" });
+  }
+
+  res.json(char);
 });
 
 // POST character
 app.post('/api/characters', async (req, res, next) => {
   try {
-    const dataCharacter = req.body;
+    const dadesCharacter = req.body;
+
+    const existeix = await Character.findOne({ number: dadesCharacter.number });
+    if (existeix) {
+      return res.status(400).json({ errors: { number: `El numero ${dadesCharacter.number} ja existeix` } });
+    }
 
     const newCharacter = new Character({
-      name: dataCharacter.name,
-      number: dataCharacter.number,
-      dies: dataCharacter.dies,
-      aliases: dataCharacter.aliases,
-      date: dataCharacter.date
+      name: dadesCharacter.name,
+      number: dadesCharacter.number,
+      dies: dadesCharacter.dies,
+      aliases: dadesCharacter.aliases,
+      date: dadesCharacter.date
     });
 
     const savedCharacter = await newCharacter.save();
@@ -71,7 +86,7 @@ app.put('/api/characters/:id', async (req, res, next) => {
       { $set: dadesActualitzades }, // actualitza nomes els camps omplerts del request
       { returnDocument: 'after', runValidators: true } // return updated character + validate with schema
     );
-      //comprovem si retorna un Character
+    //comprovem si retorna un Character
     if (!updatedCharacter) {
       return res.status(404).json({ error: "No es troba el character" });
     }

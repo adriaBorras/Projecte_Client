@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 // import type { characterType } from "../../types/characterType";
-import { postCharacter } from "../services/apiService";
+import { postCharacter, buscaCharacterPerId } from "../services/apiService";
 
 
 export function Menu({ onAfegirCharacter }: { onAfegirCharacter: () => void }) { //.ts es una funcio
@@ -24,12 +24,13 @@ export function Menu({ onAfegirCharacter }: { onAfegirCharacter: () => void }) {
     // console.log(data);
 
     try {
-      // const response = await fetch("http://localhost:3000/api/characters", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify(data),
-      // });
-      const Resultat = await postCharacter(data);
+
+      if (data.number && await buscaCharacterPerId(data.number)) {
+        setErrors({ number: `El número ${data.number} ja existeix a la base de dades` });
+        return;
+      }
+      // const Resultat = await postCharacter(data);
+      await postCharacter(data);
 
 
       onAfegirCharacter();
@@ -103,7 +104,10 @@ export function Menu({ onAfegirCharacter }: { onAfegirCharacter: () => void }) {
                     Envia
                   </button>
                   <button className="btn btn-danger"
-                    onClick={() => setMostraModalFormulari(false)}
+                    onClick={() => {
+                      setMostraModalFormulari(false)
+                      setErrors({});
+                    }}
                   >
                     Tanca
                   </button>

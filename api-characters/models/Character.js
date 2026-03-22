@@ -11,6 +11,7 @@ const characterSchema = new mongoose.Schema({
   number: {
     type: Number,
     required: [true, "El numero es obligatori -api"],
+    unique: true,
     min: [0, "El numero no pot ser negatiu -api"]
   },
   dies: {

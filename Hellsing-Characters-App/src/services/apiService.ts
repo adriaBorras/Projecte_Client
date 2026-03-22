@@ -48,8 +48,21 @@ export async function postCharacter(novesDades: Partial<characterType>): Promise
 
   if (!resposta.ok) {
     // forward validation errors if any
-    throw result.errors || new Error(result.error || "Server error");
+    throw result.errors;
   }
 
   return result;
+}
+
+export async function buscaCharacterPerId(id: number): Promise<boolean> {
+  try {
+    const res = await fetch(`${BASE_URL}/${id}`);
+    if (!res.ok) {
+      return false; // no existeix
+      
+    }
+    return true; // si existeix
+  } catch {
+    return false;// un altre error.
+  }
 }

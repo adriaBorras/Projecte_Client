@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import type { characterType } from "../types/characterType";
+import { buscaCharacterPerId } from "../services/apiService";
 
 
 type characterProps = {
@@ -58,7 +59,7 @@ export function CartaCharacter({ character, onDelete, onEdit }: characterProps) 
       errorsForm.number = "Ha de ser un numero i major que 0 -front";
     }
 
-   
+
     setErrors(errorsForm);
 
     // retorna tru si no hi han errors
@@ -112,7 +113,7 @@ export function CartaCharacter({ character, onDelete, onEdit }: characterProps) 
                     />
                     {errors.name && <div className="text-primary">{errors.name}</div>}
 
-                    <label htmlFor="name">Numero: (falta fer check per comprobar si ja existeix a la bbdd)</label>
+                    <label htmlFor="name">Numero: </label>
                     <input className="form-control mb-2"
                       name="number" type="number"
                       value={dadesFormulari.number || ""}
@@ -168,6 +169,14 @@ export function CartaCharacter({ character, onDelete, onEdit }: characterProps) 
                   className={` btn btn-success ${editant ? "" : "visually-hidden"}`}
                   onClick={async () => {
                     if (!validaFormulari()) return;
+
+                    if (dadesFormulari.number !== character.number) {
+                      const exists = await buscaCharacterPerId(dadesFormulari.number!);
+                      if (exists) {
+                        setErrors({ ...errors, number: `El número ${dadesFormulari.number} ja existeix a la base de dades` });
+                        return;
+                      }
+                    }
 
                     await onEdit(character.number, dadesFormulari);
                     setEditant(false);
