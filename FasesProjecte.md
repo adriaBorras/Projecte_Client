@@ -17,11 +17,13 @@ L'objectiu NO és fer una arquitectura perfecta des del minut 1, sinó construir
 
 #  Treball individual
 
+- Adria Borras
+
 # FASE 1 — Disseny 
 
 ## 1️⃣ Elecció de temàtica
 
- - Una aplicacio per consultar Personatges del manga/serie Hellsing.
+ - Una aplicacio per consultar Personatges del manga/anime Hellsing.
 
 ## 2️⃣ Definició del model
 L'entitat principal ha de tenir obligatòriament:
@@ -44,8 +46,7 @@ L'entitat principal ha de tenir obligatòriament:
   - Camp Nom:
     - String  
     - Obligatori
-    - minim 3 lletres
-    - maxim 30 lletres
+    - minim 3 lletres    
   - Camp Numero:
     - Number  
     - Positiu
